@@ -71,4 +71,4 @@ _dict['C'] = '((()=>{})[' + javascriptify('constructor') + '](' + \
     javascriptify('return escape') + ')()(' + \
     _dict['\\'] + '))[' + _dict['2'] + ']'
 
-print(javascriptify('alert'))
+print(*(_dict[str(num)] for num in range(2, 10)), sep='\n')
