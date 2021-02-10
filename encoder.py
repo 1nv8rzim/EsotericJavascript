@@ -1,8 +1,8 @@
-_dict = {'0': '[+[]]',
-         '1': '[+!+[]]'}
+_dict = {'0': '+[]',
+         '1': '+!+[]'}
 
 for i in range(2, 10):
-    _dict[str(i)] = '[' + '+'.join('!+[]' for _ in range(i)) + ']'
+    _dict[str(i)] = '[]+(' + '+'.join('!+[]' for _ in range(i)) + ')'
 
 
 def die_already(char):
@@ -71,4 +71,4 @@ _dict['C'] = '((()=>{})[' + javascriptify('constructor') + '](' + \
     javascriptify('return escape') + ')()(' + \
     _dict['\\'] + '))[' + _dict['2'] + ']'
 
-print(*(_dict[str(num)] for num in range(2, 10)), sep='\n')
+print(javascriptify('C'))
