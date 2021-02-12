@@ -1,16 +1,16 @@
-_dict = {'0': '+[]',
-         '1': '+!+[]'}
+_dict = {'0': '[]+(+[])',
+         '1': '[]+(+!+[])'}
 
 for i in range(2, 10):
     _dict[str(i)] = '[]+(' + '+'.join('!+[]' for _ in range(i)) + ')'
 
 
 def die_already(char):
-    return '([]+[])[' + javascriptify('constructor') + '][' + javascriptify('fromCharCode') + '](' + javascriptify(ord(char)) + ')'
+    return '(([]+[])[' + javascriptify('constructor') + '][' + javascriptify('fromCharCode') + '](' + javascriptify(str(ord(char))) + '))'
 
 
 def javascriptify(string):
-    return '+'.join(_dict[char] for char in str(string))
+    return '+'.join(_dict[char] if char in _dict else die_already(char) for char in str(string))
 
 
 # ![]+[] == false
@@ -48,16 +48,16 @@ _dict['p'] = '([]+(/-/)[' + javascriptify('constructor') + \
     '])[' + javascriptify('14') + ']'
 
 # (13)[toString](14) == d
-_dict['d'] = '(' + javascriptify('13') + ')[' + \
-    javascriptify('toString') + '](' + javascriptify('14') + ')'
+_dict['d'] = '(+(' + javascriptify('13') + '))[' + \
+    javascriptify('toString') + '](+(' + javascriptify('14') + '))'
 
 # (17)[toString](18) == h
-_dict['h'] = '(' + javascriptify('17') + ')[' + \
+_dict['h'] = '(+(' + javascriptify('17') + '))[' + \
     javascriptify('toString') + '](' + javascriptify('18') + ')'
 
 # (22)[toString](23) == m
-_dict['m'] = '(' + javascriptify('22') + ')[' + \
-    javascriptify('toString') + '](' + javascriptify('23') + ')'
+_dict['m'] = '(+(' + javascriptify('22') + '))[' + \
+    javascriptify('toString') + '](+(' + javascriptify('23') + '))'
 
 # []+[]["filter"]["constructor"] == function Function() { [native code] }
 _dict['F'] = '([]+[][' + javascriptify('filter') + '][' + \
@@ -71,4 +71,9 @@ _dict['C'] = '((()=>{})[' + javascriptify('constructor') + '](' + \
     javascriptify('return escape') + ')()(' + \
     _dict['\\'] + '))[' + _dict['2'] + ']'
 
-print(javascriptify('C'))
+
+def execute(cmd):
+    return '((()=>{})[' + javascriptify('constructor') + '](' + javascriptify(cmd) + '))()'
+
+
+print(execute('console.log(1)'))
